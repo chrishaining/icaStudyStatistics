@@ -1,0 +1,46 @@
+---
+title: "R Notebook"
+output: html_notebook
+---
+
+
+```{r}
+library(readr)
+library(dplyr)
+library(stringr)
+
+studyHours <- read_csv("../AML_LEARNING/advancedCertificate/study_hours.csv")
+studyHours
+```
+```{r}
+totalHours <- studyHours %>% summarize(sum(Hours))
+str_glue("Total Hours Studied: {totalHours}")
+totalHours
+
+meanHours <- studyHours %>% summarize(mean(Hours))
+str_glue("Mean Hours Studied: {meanHours}")
+
+medianHours <- studyHours %>% summarize(median(Hours))
+str_glue("Median Hours Studied: {medianHours}")
+
+hoursQ1 <- studyHours %>% summarize(quantile(Hours, 0.25))
+str_glue("First quartile: {hoursQ1}")
+
+hoursQ3 <- studyHours %>% summarize(quantile(Hours, 0.75))
+str_glue("Third quartile: {hoursQ3}")
+
+hoursIqr <- studyHours %>% summarize(IQR(Hours))
+str_glue("IQR for study hours: {hoursIqr}")
+
+hoursFence <- hoursIqr*1.5
+
+
+```
+
+```{r}
+# create a boxplot. As of 3rd April, there are only a few members of the population, so it doesn't look like much of a diagram. However, once there are more members, and different values for the Unit column, I can create more useful plots (for instance, I can compare the different boxplots for each unit).
+library(ggplot2)
+hoursBox <- ggplot(studyHours, aes(Hours)) + geom_boxplot(fill="dodgerblue", outlier.color="red")
+hoursBox
+```
+
